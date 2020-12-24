@@ -77,6 +77,8 @@ public class MaterialTask {
     private static Integer normal = 1;
     //HD-DPI
     private static Integer HD_DPI = 300;
+    //当前位置
+    private static int cadreNum =0;
 
 
     public void syncMaterial(){
@@ -95,19 +97,32 @@ public class MaterialTask {
 
 
             for (PersBasicInfo persBasicInfo : persBasicInfoList) {
+                String name = persBasicInfo.getName();
+                String persId = persBasicInfo.getPersID();
+
+//                persId="41ACA991-15C0-416D-B057-8364D0F5D5F0";
+//                name="刘祥龙";
+
+                ++cadreNum;
                 //查询toSession中的人员
-//                Cadre cadre = cadreRepository.findByNameAndIdCard(persBasicInfo.getName(), persBasicInfo.getIdCard());
-                List<Cadre> cadre = cadreRepository.findByName(persBasicInfo.getName());
+//                Cadre cadre = cadreRepository.findByNameAndIdCard(name, persBasicInfo.getIdCard());
+                List<Cadre> cadre = cadreRepository.findByName(name);
                 if (cadre.size() != 1) {
-                    System.out.println("干部 " + persBasicInfo.getName() + ":" + persBasicInfo.getIdCard() + "在目标源中不存在！");
+                    System.out.println(cadreNum+"干部 " + name + ":" + persBasicInfo.getIdCard() + "在目标源中不存在！");
                 } else {
+
+                    //同步剩余部分
+                    if (archiveMaterialPageRepository.findByCadreId(cadre.get(0).getId()).size()==daElectronicRepository.findByPersId(persId).size()){
+                        continue;
+                    }
+
                     //获取fromSession干部材料
-                    List<MaterialItem> materialItems = materialItemRepository.findByPersID(persBasicInfo.getPersID());
+                    List<MaterialItem> materialItems = materialItemRepository.findByPersID(persId);
                     if (CollectionUtils.isEmpty(materialItems)) {
                         System.out.println("--------干部材料信息为空");
                     } else {
-                        System.out.println("同步干部 " + persBasicInfo.getName() + ":" + persBasicInfo.getIdCard() + "开始");
-                        System.out.println("材料总数 ：" + materialItems.size());
+
+                        System.out.println(cadreNum+"同步干部 " + name + ":" + persBasicInfo.getIdCard() + "开始" +"材料总数 ：" + materialItems.size());
                         for (MaterialItem materialItem : materialItems) {
 
                             ArchiveMaterial archiveMaterial = new ArchiveMaterial();
@@ -131,16 +146,19 @@ public class MaterialTask {
                                 archiveMaterialPage.setId(materialPage.getElecId());
                                 archiveMaterialPage.setCadreId(cadre.get(0).getId());
                                 archiveMaterialPage.setMaterialId(archiveMaterial.getId());
+                                archiveMaterialPage.setImgName(materialPage.getFileName());
+                                archiveMaterialPage.setPageNumber(materialPage.getOrderId());
                                 archiveMaterialPage.setStatus(normal);
                                 archiveMaterialPageRepository.save(archiveMaterialPage);
                             }
-                            System.out.println("成功！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
                         }
+
+                        System.out.println(cadreNum+"同步干部 " + name + ":" + persBasicInfo.getIdCard() + "结束"+"材料总数 ：" + materialItems.size());
                     }
 
 
                 }
-
+//                break;
 
             }
 

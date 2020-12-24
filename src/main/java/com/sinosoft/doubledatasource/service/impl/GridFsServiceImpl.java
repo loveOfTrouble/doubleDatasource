@@ -152,9 +152,9 @@ public class GridFsServiceImpl implements GridFsService {
     @Override
     public GridFSFile downloadDecrypt2(String id, OutputStream out) throws Exception {
         if (out != null) {
-            String loginName= SecurityUtils.getSubject().getCurrentLoginName();
-            GridFSDownloadStream stream = bucket.openDownloadStream(new BsonString(id));
-            out.write(decrypt(stream, StringUtil.isEmptyOrNull(loginName)?"组织部":loginName));
+//            String loginName= SecurityUtils.getSubject().getCurrentLoginName();
+//            GridFSDownloadStream stream = bucket.openDownloadStream(new BsonString(id));
+//            out.write(decrypt(stream, StringUtil.isEmptyOrNull(loginName)?"组织部":loginName));
         }
         return gridFsTemplate.findOne(Query.query(where("_id").is(id)));
     }

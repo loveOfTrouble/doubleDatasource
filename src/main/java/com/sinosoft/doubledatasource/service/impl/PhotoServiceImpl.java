@@ -1,10 +1,12 @@
 package com.sinosoft.doubledatasource.service.impl;
 
+import com.sinosoft.doubledatasource.model.primary.ArchiveMaterial;
 import com.sinosoft.doubledatasource.model.primary.ArchiveMaterialPage;
 import com.sinosoft.doubledatasource.model.primary.Cadre;
 import com.sinosoft.doubledatasource.model.secondary.DaElectronic;
 import com.sinosoft.doubledatasource.model.secondary.PersBasicInfo;
 import com.sinosoft.doubledatasource.repository.primary.ArchiveMaterialPageRepository;
+import com.sinosoft.doubledatasource.repository.primary.ArchiveMaterialRepository;
 import com.sinosoft.doubledatasource.repository.primary.CadreRepository;
 import com.sinosoft.doubledatasource.repository.secondary.DaElectronicRepository;
 import com.sinosoft.doubledatasource.repository.secondary.PersBasicInfoRepository;
@@ -43,6 +45,9 @@ public class PhotoServiceImpl implements PhotoService {
     @Autowired
     private GridFsService gridFsService;
 
+    @Autowired
+    private ArchiveMaterialRepository archiveMaterialRepository;
+
 
     @Override
     public void synchronizeCadreFilePhoto() {
@@ -50,8 +55,11 @@ public class PhotoServiceImpl implements PhotoService {
         List<PersBasicInfo> all = persBasicInfoRepository.findAll();
         for (PersBasicInfo p : all) {
             String id = p.getPersID();
-
             String name = p.getName();
+
+            id="41ACA991-15C0-416D-B057-8364D0F5D5F0";
+            name="刘祥龙";
+
             List<Cadre> byName = toCadreRepository.findByName(name);
 
             if (byName.size() != 1) {
@@ -59,60 +67,76 @@ public class PhotoServiceImpl implements PhotoService {
             }
             Cadre cadre = byName.get(0);
 
+            List<ArchiveMaterial> archiveMaterials = archiveMaterialRepository.findAllByCadreId(cadre.getId());
+
+
             //文件
-            List<DaElectronic> electronics = daElectronicRepository.findByPersId(id);
+//            List<DaElectronic> electronics = daElectronicRepository.findByPersId(id);
 
             List<ArchiveMaterialPage> saveList = new ArrayList<>();
 
             String md5;
 
-            for (DaElectronic daElectronic : electronics) {
-                //path
-                String fileName = daElectronic.getFileName();
 
-                filePath = filePath + id + "//" + fileName;
-                File file = new File(filePath + fileName);
+            for (ArchiveMaterial archiveMaterial : archiveMaterials) {
 
-                if (file.isFile()) {
-                    try {
-                        FileInputStream fileInputStream = new FileInputStream(file);
+                List<ArchiveMaterialPage> archiveMaterialPages = archiveMaterialPageRepository.findByMaterialId(archiveMaterial.getId());
 
-                        byte[] bytesByFile = FileUtil.getBytesByFile(filePath + id + fileName);
-                        Long size = Long.valueOf(bytesByFile.length);
-                        md5 = DigestUtils.md5Hex(bytesByFile);
+                for (ArchiveMaterialPage archiveMaterialPage : archiveMaterialPages) {
+                        //path
+                        String fileName = archiveMaterialPage.getImgName();
 
-                        //存到mongo中返回主键
-                        String save = gridFsService.save(fileInputStream, fileName);
+                        String path = filePath + id + "\\" + fileName;
 
-                        ArchiveMaterialPage archiveMaterialPage = new ArchiveMaterialPage();
+                        File file = new File(path);
 
-                        archiveMaterialPage.setCadreId(cadre.getId());
+                        if (file.isFile()) {
+                            try {
+                                FileInputStream fileInputStream = new FileInputStream(file);
 
-                        archiveMaterialPage.setHdId(save);
-                        archiveMaterialPage.setHdSize(size);
-                        archiveMaterialPage.setHdLastModifiedTime(new Date());
-                        archiveMaterialPage.setHdMd5(md5);
-                        archiveMaterialPage.setHdDpi(0);
-                        archiveMaterialPage.setHdGrayScale(0);
+                                byte[] bytesByFile = FileUtil.getBytesByFile(path);
+                                Long size = Long.valueOf(bytesByFile.length);
+                                md5 = DigestUtils.md5Hex(bytesByFile);
 
-                        archiveMaterialPage.setImgId(save);
-                        archiveMaterialPage.setImgSize(size);
-                        archiveMaterialPage.setImgMd5(md5);
-                        archiveMaterialPage.setHdDpi(0);
-                        archiveMaterialPage.setImgGrayScale(0);
-                        archiveMaterialPage.setImgLastModifiedTime(new Date());
+                                //存到mongo中返回主键
+                                String save = gridFsService.save(fileInputStream, fileName);
 
-                        saveList.add(archiveMaterialPage);
+                                archiveMaterialPage.setCadreId(cadre.getId());
 
-                    } catch (Exception e) {
-                        //把图片存进mongo出错
-                        System.out.println(fileName + "没存进去");
-                        e.printStackTrace();
-                        continue;
+                                archiveMaterialPage.setHdId(save);
+                                archiveMaterialPage.setHdSize(size);
+                                archiveMaterialPage.setHdLastModifiedTime(new Date());
+                                archiveMaterialPage.setHdMd5(md5);
+                                archiveMaterialPage.setHdDpi(0);
+                                archiveMaterialPage.setHdGrayScale(0);
+
+                                archiveMaterialPage.setImgId(save);
+                                archiveMaterialPage.setImgSize(size);
+                                archiveMaterialPage.setImgMd5(md5);
+                                archiveMaterialPage.setHdDpi(0);
+                                archiveMaterialPage.setImgGrayScale(0);
+                                archiveMaterialPage.setImgLastModifiedTime(new Date());
+
+                                saveList.add(archiveMaterialPage);
+
+                            } catch (Exception e) {
+                                //把图片存进mongo出错
+                                System.out.println(fileName + "没存进去");
+                                e.printStackTrace();
+                                continue;
+                            }
+                        }
                     }
-                }
+
+
             }
+
+
+
             archiveMaterialPageRepository.saveAll(saveList);
+            break;
         }
     }
+
+
 }

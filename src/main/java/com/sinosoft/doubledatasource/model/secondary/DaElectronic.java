@@ -28,7 +28,7 @@ public class DaElectronic {
   private String typeId;
 
   @Column(name = "Orderid")
-  private long orderId;
+  private Integer orderId;
 
   @Column(name = "Filename")
   private String fileName;
@@ -71,11 +71,11 @@ public class DaElectronic {
     this.typeId = typeId;
   }
 
-  public long getOrderId() {
+  public Integer getOrderId() {
     return orderId;
   }
 
-  public void setOrderId(long orderId) {
+  public void setOrderId(Integer orderId) {
     this.orderId = orderId;
   }
 

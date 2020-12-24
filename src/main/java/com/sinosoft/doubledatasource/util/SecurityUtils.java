@@ -1,3 +1,4 @@
+/*
 package com.sinosoft.doubledatasource.util;
 
 import com.sinosoft.ops.archive.common.context.ExecuteContext;
@@ -26,11 +27,13 @@ public class SecurityUtils {
         return securityUtil;
     }
 
-    /**
+    */
+/**
      * 当前登录人用户名
      *
      * @return
-     */
+     *//*
+
     public String getCurrentLoginName() {
         if (ExecuteContext.Request.currentRequest() == null) {
             return "";
@@ -56,19 +59,23 @@ public class SecurityUtils {
         return claims.getId();
     }
 
-    /**
+    */
+/**
      * 当前登录人信息
      *
      * @return
-     */
+     *//*
+
     public User getCurrentUser() {
         return UserCacheManager.getUserInfo(getCurrentLoginName());
     }
-    /**
+    */
+/**
      * 当前用户部分权限信息
      *
      * @return
-     */
+     *//*
+
     public Map<String,Object> getCurrentCadre() {
         return UserCacheManager.getCurrentCadre(getCurrentLoginName());
     }
@@ -77,11 +84,13 @@ public class SecurityUtils {
         return UserCacheManager.getUserRole(getCurrentLoginName());
     }
 
-    /**
+    */
+/**
      * 登陆后调用
      *
      * @return
-     */
+     *//*
+
     public void Login(String loginName) {
         UserCacheManager.clearUser(loginName);
         UserCacheManager.getUserInfo(loginName);
@@ -93,11 +102,13 @@ public class SecurityUtils {
         CookieUtils.addCookie(ExecuteContext.Response.currentResponse(), ACCESS_TOKEN, token, 0);
     }
 
-    /**
+    */
+/**
      * 退出调用
      *
      * @return
-     */
+     *//*
+
     public void LoginOut() {
         UserCacheManager.clearUser(getCurrentLoginName());
         CookieUtils.removeCookie(ExecuteContext.Response.currentResponse(), ACCESS_TOKEN);
@@ -134,3 +145,4 @@ public class SecurityUtils {
         CookieUtils.addCookie(ExecuteContext.Response.getCurrent(), ACCESS_TOKEN, token, 0);
     }
 }
+*/

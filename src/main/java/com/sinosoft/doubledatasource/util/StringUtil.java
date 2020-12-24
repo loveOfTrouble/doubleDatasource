@@ -1,6 +1,6 @@
 package com.sinosoft.doubledatasource.util;
 
-import com.sinosoft.ops.archive.common.constant.Constants;
+//import com.sinosoft.ops.archive.common.constant.Constants;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -161,11 +161,11 @@ public final class StringUtil {
         return 0;
     }
 
-    public static String addlike(String str){
+//    public static String addlike(String str){
 
-        StringBuffer s=new StringBuffer(Constants.LIKE_CHAR);
-        s.append(str).append(Constants.LIKE_CHAR);
-        return s.toString();
+//        StringBuffer s=new StringBuffer(Constants.LIKE_CHAR);
+//        s.append(str).append(Constants.LIKE_CHAR);
+//        return s.toString();
 
-    }
+//    }
 }

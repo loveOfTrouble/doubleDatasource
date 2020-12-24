@@ -5,7 +5,9 @@ import com.sinosoft.doubledatasource.service.task.MaterialTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Start implements ApplicationRunner {
 
     @Autowired
@@ -19,6 +21,6 @@ public class Start implements ApplicationRunner {
 
         materialTask.syncMaterial();
 
-        photoService.synchronizeCadreFilePhoto();
+//        photoService.synchronizeCadreFilePhoto();
     }
 }
