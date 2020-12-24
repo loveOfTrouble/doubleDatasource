@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.ResponseEntity.ok;
 
+/**
+ * @author ASUS
+ */
 @RestController
 @RequestMapping(value = "/archive")
-public class test {
+public class ArchiveController {
 
     @Autowired
     MaterialTask materialTask;
