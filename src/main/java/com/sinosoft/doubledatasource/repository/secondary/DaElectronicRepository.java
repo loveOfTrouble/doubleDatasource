@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface DaElectronicRepository extends JpaRepository<DaElectronic, String> {
     List<DaElectronic> findByMaterialId(long materialID);
+
+    List<DaElectronic> findByPersId(String persionId);
 }

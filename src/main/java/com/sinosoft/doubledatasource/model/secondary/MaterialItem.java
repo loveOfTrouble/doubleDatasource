@@ -10,6 +10,7 @@ import java.util.Date;
  * @author guodi
  * @Description:
  * @Date 2020/12/22
+ * 材料表
  */
 @Entity
 @Table(name = "DA_Materialitem")

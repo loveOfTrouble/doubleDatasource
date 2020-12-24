@@ -7,6 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
+/**
+ * 页码表
+ */
 @Entity
 @Table(name = "DA_Electronic")
 public class DaElectronic {
