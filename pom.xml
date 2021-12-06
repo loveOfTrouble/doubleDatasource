@@ -34,12 +34,6 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>com.dm.dialect</groupId>
-            <artifactId>hibernate5</artifactId>
-            <version>5.0</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -51,12 +45,6 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>12.2.0.1</version>
         </dependency>
 
         <dependency>
